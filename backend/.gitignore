@@ -1,0 +1,28 @@
+# Bytecode and cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Testing & Linting
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+employees.db
+
+# Environment variables
+.env
+.env.*
+!.env.example
