@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     ENVIRONMENT: str = "development"
 
-    DATABASE_URL: str = "sqlite+aiosqlite:///./employees.db" #fallback for local db
+    DATABASE_URL: str = "sqlite+aiosqlite:///./employees.db" #fallback for local db (Added intentionally)
 
     DB_POOL_SIZE: int = 10
     DB_MAX_OVERFLOW: int = 20
