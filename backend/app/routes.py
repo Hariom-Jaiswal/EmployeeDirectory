@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.database import get_db, check_db_connection
 from app.repository import EmployeeRepository
 from app.service import EmployeeService
-from app.schemas import PaginatedEmployeeResponse, EmployeeRead, EmployeeCreate
+from app.schemas import PaginatedEmployeeResponse
 
 router = APIRouter(tags=["Employees"])
 
@@ -48,31 +48,6 @@ async def search_employees(
 ) -> PaginatedEmployeeResponse:
     """Delegates query execution strictly to the Service layer"""
     return await service.search_employees(search=search, mode=mode, limit=limit, offset=offset)
-
-
-@router.get(
-    "/employees/{employee_id}",
-    response_model=EmployeeRead,
-    summary="Get employee details by ID",
-)
-async def get_employee(
-    employee_id: str,
-    service: EmployeeService = Depends(get_employee_service),
-) -> EmployeeRead:
-    return await service.get_employee_by_id(employee_id=employee_id)
-
-
-@router.post(
-    "/employees",
-    response_model=EmployeeRead,
-    status_code=status.HTTP_201_CREATED,
-    summary="Create a new employee",
-)
-async def create_employee(
-    employee_in: EmployeeCreate,
-    service: EmployeeService = Depends(get_employee_service),
-) -> EmployeeRead:
-    return await service.create_employee(data=employee_in)
 
 
 @router.get("/health", tags=["System"], summary="Application & Database Health Status")

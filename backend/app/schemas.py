@@ -17,10 +17,6 @@ class EmployeeBase(BaseModel):
     date_of_joining: date = Field(..., description="Date of joining (YYYY-MM-DD)")
 
 
-class EmployeeCreate(EmployeeBase):
-    """Schema for employee creation (demonstrates future extensibility)"""
-    pass
-
 
 class EmployeeRead(EmployeeBase):
     """Schema for returning employee data to clients"""

@@ -1,8 +1,7 @@
 from typing import Optional
 from fastapi import HTTPException, status
 from app.repository import EmployeeRepository
-from app.schemas import PaginatedEmployeeResponse, EmployeeRead, EmployeeCreate
-from app.models import Employee
+from app.schemas import PaginatedEmployeeResponse, EmployeeRead
 
 
 class EmployeeService:
@@ -57,23 +56,3 @@ class EmployeeService:
             limit=limit,
             offset=offset,
         )
-
-    async def get_employee_by_id(self, employee_id: str) -> EmployeeRead:
-        employee = await self.repository.get_by_id(employee_id)
-        if not employee:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Employee with ID {employee_id} not found.",
-            )
-        return EmployeeRead.model_validate(employee)
-
-    async def create_employee(self, data: EmployeeCreate) -> EmployeeRead:
-        existing = await self.repository.get_by_email(data.email)
-        if existing:
-            raise HTTPException(
-                status_code=status.HTTP_409_CONFLICT,
-                detail=f"Employee with email '{data.email}' already exists.",
-            )
-        new_emp = Employee(**data.model_dump())
-        created = await self.repository.create(new_emp)
-        return EmployeeRead.model_validate(created)

@@ -64,16 +64,3 @@ class EmployeeRepository:
 
         return items, total_count
 
-    async def get_by_id(self, employee_id: str) -> Optional[Employee]:
-        query = select(Employee).where(Employee.id == employee_id)
-        return await self.session.scalar(query)
-
-    async def get_by_email(self, email: str) -> Optional[Employee]:
-        query = select(Employee).where(Employee.email == email)
-        return await self.session.scalar(query)
-
-    async def create(self, employee: Employee) -> Employee:
-        self.session.add(employee)
-        await self.session.commit()
-        await self.session.refresh(employee)
-        return employee

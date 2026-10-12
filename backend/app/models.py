@@ -17,9 +17,9 @@ class Employee(Base):
     
     __tablename__ = "employees"
 
-    id: Mapped[str] = mapped_column(String(50), primary_key=True, index=True)
+    id: Mapped[str] = mapped_column(String(50), primary_key=True) #Primary key
     name: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
-    email: Mapped[str] = mapped_column(String(150), nullable=False, unique=True, index=True)
+    email: Mapped[str] = mapped_column(String(150), nullable=False, unique=True) #Unique email (Duplication Prevention)
     department: Mapped[str] = mapped_column(String(50), nullable=False, index=True)
     designation: Mapped[str] = mapped_column(String(100), nullable=False)
     date_of_joining: Mapped[date] = mapped_column(Date, nullable=False)

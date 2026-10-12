@@ -7,7 +7,7 @@ from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
 
 from app.database import settings, engine, Base
-from app.models import Employee  # Ensures model is registered on Base
+from app.models import Employee
 from app.routes import router
 
 logging.basicConfig(
@@ -41,7 +41,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS configuration for Frontend connectivity
+# CORS configuration (to whitelist frontend requests)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.CORS_ORIGINS,
@@ -84,7 +84,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     )
 
 
-# Mount routes
+# Include router
 app.include_router(router)
 app.include_router(router, prefix=settings.API_V1_STR)
 
