@@ -25,9 +25,10 @@ Instead of establishing a database connection on every single request (which int
 
 ### 3. Database Indexing
 As the database grows, scanning every record in a table becomes very time intensive. I added B-Tree indexes on the primary search columns:
+* `id`: Primary Key (to automatically indexed as unique clustered B-Tree by the database).
 * `name`: B-Tree indexed for fast prefix searches. (eg. Rah%)
 * `department`: B-Tree indexed for quick department filtering. (eg. Fin%)
-* `email`: Unique B-Tree indexed for integrity. 
+* `email`: Unique true for integrity. 
 
 ### 4. B-Tree Index & Prefix Search 
 Since I am developing a Search feature, mostly user searches the words near to there true value so I have make use of **prefix search** to allow user to search the employee even if with near to accurate info
@@ -39,8 +40,8 @@ compared to
 
 ### 5. Debouncing API Requests
 Sending an API request on every keystroke causes unnecessary network and database load. Conversely, waiting until the user submits can lead to zero matches due to minor typos.
-* To solve this, I implemented a **800ms debounce timer** (`useDebounce`).
-* When the user types continuously, requests are paused. The moment a 800ms pause is detected (indicating the user paused or finished typing), the API request is dispatched.
+* To solve this, I implemented a **600ms debounce timer** (`useDebounce`, configurable via `VITE_DEBOUNCE_MS` in `.env`).
+* When the user types continuously, requests are paused. The moment a pause is detected (indicating the user paused or finished typing), the API request is dispatched.
 * Combined with B-Tree prefix searching, this strikes the ideal balance between low server load and instant search responsiveness.
 
 ### 6. Pagination & In-Engine Counting
@@ -88,7 +89,7 @@ I used Pydantic and custom service layers to strictly validate inputs and handle
   * **`Pagination.tsx`**: Range counter with Prev/Next buttons.
 * **Hooks (`hooks/`)**:
   * **`useEmployees.ts`**: Core state machine managing queries, pagination, debounce state, and request cancellation.
-  * **`useDebounce.ts`**: Reusable 800ms debounce timer hook.
+  * **`useDebounce.ts`**: Reusable 600ms debounce timer hook (configurable via `VITE_DEBOUNCE_MS`).
 * **`api.ts`**: Fetch client with error handling and `AbortSignal` support.
 * **`types.ts`**: TypeScript definitions for employees, pagination, and search modes.
 
@@ -96,12 +97,12 @@ I used Pydantic and custom service layers to strictly validate inputs and handle
 
 ## Frontend
 
-1. **800ms Debouncing:**
+1. **600ms Debouncing:**
    Throttles API requests during active typing to prevent request flooding.
 2. **`AbortController` Cancellation:**
    If a user types before the previous request finishes, the in-flight request is cancelled immediately, preventing race conditions and stale data overwrites.
 3. **Instant Skeleton Shimmer Loader:**
-   Triggered immediately upon keystroke without waiting for the 800ms debounce timer to expire, giving the user instant visual responsiveness.
+   Triggered immediately upon keystroke without waiting for the debounce timer to expire, giving the user instant visual responsiveness.
 4. **Avatars:**
    Avatars are bound to employee IDs: (Implemented for Visuals)
    * `M1...`, `M2...`, `M3...` $\rightarrow$ Male avatars (`avatar-1.jpg`, `avatar-2.jpg`, `avatar-3.jpg`)
@@ -117,8 +118,6 @@ I used Pydantic and custom service layers to strictly validate inputs and handle
 | Method | Endpoint | Description |
 | :--- | :--- | :--- |
 | `GET` | `/employees?search=rahul&mode=both` | Prefix search across name, department, or both with pagination |
-| `GET` | `/employees/{id}` | Retrieve employee details by unique ID (e.g. `M1001`) |
-| `POST` | `/employees` | Create a new employee record |
 | `GET` | `/health` | System and database connectivity health check |
 | `GET` | `/docs` | Interactive Swagger UI API documentation |
 
