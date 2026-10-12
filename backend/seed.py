@@ -49,6 +49,10 @@ async def seed():
         await session.commit()
         print("Database successfully seeded yayayayay")
 
+#Added to prevent WARNING event loop closed since its Async process
+    await engine.dispose()
+    await asyncio.sleep(0.1)
+
 
 if __name__ == "__main__":
     asyncio.run(seed())
