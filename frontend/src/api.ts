@@ -1,9 +1,7 @@
 import type { Employee, PaginatedResponse, EmployeeQueryParams } from './types';
 
-//Added Fallback 
-export const API_BASE_URL: string =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined)?.replace(/\/+$/, '') ||
-  'http://localhost:8000';
+import { API_BASE_URL } from './config/env';
+export { API_BASE_URL };
 
 export class ApiError extends Error {
   status: number;

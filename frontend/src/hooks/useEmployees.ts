@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { useDebounce } from './useDebounce';
 import { fetchEmployees, ApiError } from '../api';
+import { DEBOUNCE_MS } from '../config/env';
 import type { Employee, APIStatus, SearchMode } from '../types';
 
 interface UseEmployeesOptions {
@@ -8,7 +9,7 @@ interface UseEmployeesOptions {
   debounceMs?: number;
 }
 
-export function useEmployees({ initialLimit = 8, debounceMs = 300 }: UseEmployeesOptions = {}) {
+export function useEmployees({ initialLimit = 8, debounceMs = DEBOUNCE_MS }: UseEmployeesOptions = {}) {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchMode, setSearchMode] = useState<SearchMode>('both');
   const debouncedSearch = useDebounce(searchTerm, debounceMs);

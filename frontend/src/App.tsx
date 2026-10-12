@@ -21,7 +21,7 @@ export const App: React.FC = () => {
     setPage,
     clearSearch,
     retry,
-  } = useEmployees({ initialLimit: 9, debounceMs: 300 });
+  } = useEmployees({ initialLimit: 9 });
 
   const hasSearchQuery = searchTerm.trim().length > 0;
   const isTypingOrLoading = isDebouncing || status === 'loading';
@@ -39,8 +39,8 @@ export const App: React.FC = () => {
         >
           <h1
             className={`font-bold tracking-tight text-neutral-900 select-none transition-all duration-200 ${hasSearchQuery
-                ? 'text-2xl sm:text-3xl mb-4'
-                : 'text-4xl sm:text-5xl md:text-6xl mb-6'
+              ? 'text-2xl sm:text-3xl mb-4'
+              : 'text-4xl sm:text-5xl md:text-6xl mb-6'
               }`}
           >
             Employee Directory
